@@ -28,3 +28,23 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### IntelliJ IDEA ###
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+### Build / Target ###
+target/
+build/
+
+
+# 1. Ігнорувати все в репозиторії
+/*
+
+# 2. Робити виняток лише для потрібного
+!/src/
+!/.gitignore
+!/README.md
