@@ -1,5 +1,5 @@
 ### IntelliJ IDEA ###
-out/
+Labs/lab01/task01/out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 .kotlin
@@ -27,4 +27,18 @@ bin/
 .vscode/
 
 ### Mac OS ###
+.DS_Store
+
+**/.idea/
+.idea/
+
+**/*.iml
+*.iml
+
+**/out/
+out/
+target/
+bin/
+
+*.class
 .DS_Store
