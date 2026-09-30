@@ -1,0 +1,44 @@
+### IntelliJ IDEA ###
+Labs/lab01/task01/out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+.kotlin
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+**/.idea/
+.idea/
+
+**/*.iml
+*.iml
+
+**/out/
+out/
+target/
+bin/
+
+*.class
+.DS_Store
