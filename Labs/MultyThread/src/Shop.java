@@ -1,4 +1,3 @@
-
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -25,14 +24,13 @@ public class Shop {
     private static final Object lock = new Object();
 
     // Окрема FIFO-черга кожної каси; індекс у списку відповідає індексу касира.
-    private static final List<Deque<Visitor>> queues =
-            new ArrayList<>();
+    private static final List<Deque<Visitor>> queues = new ArrayList<>();
 
     // Стає false після появи останнього відвідувача, щоб касири завершили роботу.
     private static volatile boolean running = true;
 
     // Етап обробки відвідувача: очікує, обслуговується або вже обслужений.
-    enum State {
+    enum VisitorState {
         WAITING,
         SERVING,
         DONE
@@ -51,7 +49,7 @@ public class Shop {
         private int cashierIndex;
 
         // Поточний етап обробки; зміни виконуються під блокуванням lock.
-        private State state = State.WAITING;
+        private VisitorState state = VisitorState.WAITING;
 
         // Створює потік відвідувача з заданим номером.
         Visitor(int id) {
@@ -71,12 +69,12 @@ public class Shop {
 
                     System.out.println(
                             "Відвідувач " + id
-                            + " став у чергу до каси "
-                            + (cashierIndex + 1)
+                                    + " став у чергу до каси "
+                                    + (cashierIndex + 1)
                     );
 
                     // Поки касир не забрав відвідувача, можна перейти в коротшу чергу.
-                    while (state == State.WAITING) {
+                    while (state == VisitorState.WAITING) {
 
                         // Якщо інша черга стала строго коротшою, переходимо в її кінець.
                         int bestQueue = findShortestQueue();
@@ -92,15 +90,15 @@ public class Shop {
 
                             System.out.println(
                                     "Відвідувач " + id
-                                    + " перейшов до каси "
-                                    + (cashierIndex + 1)
+                                            + " перейшов до каси "
+                                            + (cashierIndex + 1)
                             );
 
                             lock.notifyAll();
                         }
 
                         // wait тимчасово відпускає lock; тайм-аут дає змогу повторити перевірку.
-                        if (state == State.WAITING) {
+                        if (state == VisitorState.WAITING) {
                             lock.wait(200);
                         }
                     }
@@ -157,12 +155,12 @@ public class Shop {
                     // Забираємо першого у FIFO-черзі та позначаємо початок його обслуговування.
                     visitor = queues.get(id).removeFirst();
 
-                    visitor.state = State.SERVING;
+                    visitor.state = VisitorState.SERVING;
 
                     System.out.println(
                             "Каса " + (id + 1)
-                            + " почала обслуговувати відвідувача "
-                            + visitor.id
+                                    + " почала обслуговувати відвідувача "
+                                    + visitor.id
                     );
 
                     lock.notifyAll();
@@ -183,12 +181,12 @@ public class Shop {
                 synchronized (lock) {
 
                     // Фіксуємо завершення обслуговування та сповіщаємо потоки, що чекають на зміни.
-                    visitor.state = State.DONE;
+                    visitor.state = VisitorState.DONE;
 
                     System.out.println(
                             "Каса " + (id + 1)
-                            + " завершила обслуговування відвідувача "
-                            + visitor.id
+                                    + " завершила обслуговування відвідувача "
+                                    + visitor.id
                     );
 
                     lock.notifyAll();
